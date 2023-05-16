@@ -1,0 +1,86 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI-enabled PDF analysis</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Add new styles here */
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="ribbon-container">
+        <div class="logo-container">
+          <img src="logo.png" alt="Logo Placeholder">
+        </div>
+        <div class="title-container">
+          <h1 class="title">AI-enabled PDF analysis</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container main-container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="instructions">
+          <div class="box-container">
+            <div class="instructions-content">
+              <h2>How to Use</h2>
+              <ol class="usage-steps">
+                <li>Upload PDF</li>
+                <li>Enter OpenAI API Key</li>
+                <li>Enter Question</li>
+                <li>Click Run</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="input-section">
+          <div class="input-file">
+            <label for="file">Choose File</label>
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="file" onchange="showFileName(this)">
+              <label class="custom-file-label" for="file" id="file-label">No file selected</label>
+            </div>
+          </div>
+          <div class="input-api">
+            <label for="text">OpenAI API Key</label>
+            <input type="text" class="form-control" id="OpenAI" placeholder="Enter API Key">
+          </div>
+          <div class="input-question">
+            <label for="question">Question</label>
+            <textarea class="form-control" id="question" placeholder="Enter your question"></textarea>
+          </div>
+          <div class="button-section">
+            <button class="btn btn-primary" onclick="clearResponse()">Clear</button>
+            <button class="btn btn-primary" onclick="run(event)">Run</button>
+            <button class="btn btn-primary" id="copy-button" onclick="copyResponse()">Copy Response</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="output-container">
+    <div class="response-output">
+      <textarea class="form-control" id="response-text" placeholder="Response here..." disabled></textarea>
+    </div>
+    <div id="spinner" class="spinner-container"  style="display: none">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+ 
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+</html>
