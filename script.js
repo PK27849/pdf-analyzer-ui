@@ -28,7 +28,7 @@ function showFileName(input) {
       return;
     }
   
-    var apiUrl = 'http://127.0.0.1:8000/search';
+    var apiUrl = 'https://prasank02-pdf-search-api.hf.space/search';
     var formData = new FormData();
     formData.append('file', file);
     formData.append('api_key', openAIKey);
