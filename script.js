@@ -42,6 +42,7 @@ function showFileName(input) {
       const response = await fetch(apiUrl, {
         method: 'POST',
         body: formData
+        timeout: 120000 // Set the timeout to 60 seconds (60000 milliseconds)
       });
   
       if (!response.ok) {
