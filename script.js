@@ -1,11 +1,11 @@
 function showFileName(input) {
-    if (input.files && input.files[0]) {
-      var fileName = input.files[0].name;
-      document.getElementById('file-label').innerHTML = fileName;
-    }
+  if (input.files && input.files[0]) {
+    var fileName = input.files[0].name;
+    document.getElementById('file-label').innerHTML = fileName;
   }
+}
 
-  async function run(event) {
+async function run(event) {
   event.preventDefault();
 
   var fileInput = document.getElementById('file');
@@ -37,11 +37,10 @@ function showFileName(input) {
   document.body.classList.remove('blur'); // Remove blur from the background
 
   try {
-    const response = await fetch(apiUrl, {
+    const response = await fetchWithTimeout(apiUrl, {
       method: 'POST',
-      body: formData,
-      timeout: 120000 // Set the timeout to 60 seconds (60000 milliseconds)
-    });
+      body: formData
+    }, 240000); // Set the timeout duration to 2 minutes (120000 milliseconds)
 
     if (!response.ok) {
       throw new Error('Error occurred while fetching the response.');
@@ -51,27 +50,28 @@ function showFileName(input) {
     responseText.value = data.response;
   } catch (error) {
     console.error('Error:', error);
-    if (error.name === 'AbortError') {
-      // Timeout error occurred
-      responseText.value = 'Timeout error occurred while fetching the response.';
-    } else {
-      responseText.value = 'Error occurred while fetching the response.';
-    }
+    responseText.value = 'Error occurred while fetching the response.';
   } finally {
     spinnerContainer.style.display = 'none'; // Hide the spinner after receiving the response or error
     document.body.classList.remove('blur'); // Remove blur from the background
   }
 }
 
+function fetchWithTimeout(url, options, timeout) {
+  return Promise.race([
+    fetch(url, options),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Request timed out')), timeout)
+    )
+  ]);
+}
 
-  function showAlert() {
-    swal("Error!", "Please fill all the details", "error");
-  }
+function showAlert() {
+  swal("Error!", "Please fill in all the details", "error");
+}
 
-  
-
-function clearResponse(){
-  // clear the response text
+function clearResponse() {
+  // Clear the response text
   var responseText = document.getElementById('response-text');
   responseText.value = '';
 }
@@ -87,7 +87,7 @@ function copyResponse() {
       // Optionally provide feedback to the user
       var copyButton = document.getElementById('copy-button');
       copyButton.textContent = 'Copied!';
-      setTimeout(function() {
+      setTimeout(function () {
         copyButton.textContent = 'Copy Response';
       }, 2000); // Reset the button text after 2 seconds
     })
@@ -96,5 +96,39 @@ function copyResponse() {
     });
 }
 
+function togglePasswordVisibility() {
+  var passwordInput = document.getElementById('OpenAI');
+  var toggleIcon = document.querySelector('.toggle-password');
 
+  if (passwordInput.getAttribute('type') === 'password') {
+    var textInput = document.createElement('input');
+    textInput.setAttribute('type', 'text');
+    textInput.setAttribute('class', 'form-control');
+    textInput.setAttribute('id', 'OpenAI');
+    textInput.setAttribute('placeholder', 'Enter API Key');
+    textInput.value = passwordInput.value;
 
+    passwordInput.parentNode.replaceChild(textInput, passwordInput);
+    toggleIcon.classList.add('visible');
+  } else {
+    var passwordInput = document.createElement('input');
+    passwordInput.setAttribute('type', 'password');
+    passwordInput.setAttribute('class', 'form-control');
+    passwordInput.setAttribute('id', 'OpenAI');
+    passwordInput.setAttribute('placeholder', 'Enter API Key');
+    passwordInput.value = textInput.value;
+
+    textInput.parentNode.replaceChild(passwordInput, textInput);
+    toggleIcon.classList.remove('visible');
+  }
+}
+
+$(document).ready(function() {
+  // Automatically resize textarea to fit content
+  function autoResizeTextarea() {
+    $(this).css('height', 'auto').height(this.scrollHeight);
+  }
+
+  // Listen for input event and trigger autoResizeTextarea()
+  $('#response-text').on('input', autoResizeTextarea);
+});
