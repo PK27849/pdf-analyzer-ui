@@ -40,17 +40,28 @@ async function run(event) {
     const response = await fetchWithTimeout(apiUrl, {
       method: 'POST',
       body: formData
-    }, 240000); // Set the timeout duration to 2 minutes (120000 milliseconds)
+    }, 300000); // Set the timeout duration to 5 minutes (120000 milliseconds)
 
+    // if (!response.ok) {
+    //   throw new Error(responseText);
+    // }
     if (!response.ok) {
-      throw new Error('Error occurred while fetching the response.');
+      const errorMessage = await response.text();
+      throw new Error(errorMessage);
+      // throw new Error('Response error: ' + response.status + ' ' + response.statusText);
     }
 
     const data = await response.json();
     responseText.value = data.response;
   } catch (error) {
+    // console.error('Error:', error);
+    // responseText.value = 'Timeout occured while fetching the response';
+    // responseText.value = 'An error occurred: ' + error;
     console.error('Error:', error);
-    responseText.value = 'Error occurred while fetching the response.';
+    const errorString = error.message;
+    const errorObject = JSON.parse(errorString);
+    console.log(errorObject.detail); // Output: This model's maximum context length is 4097 tokens, however you requested 1204850 tokens (1204594 in your prompt; 256 for the completion). Please reduce your prompt; or completion length.
+    responseText.value = 'An error occurred: ' + errorObject.detail;
   } finally {
     spinnerContainer.style.display = 'none'; // Hide the spinner after receiving the response or error
     document.body.classList.remove('blur'); // Remove blur from the background
