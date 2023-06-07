@@ -42,7 +42,9 @@ async function run(event) {
       body: formData
     }, 300000); // Set the timeout duration to 5 minutes (120000 milliseconds)
 
-
+    // if (!response.ok) {
+    //   throw new Error(responseText);
+    // }
     if (!response.ok) {
       const errorMessage = await response.text();
       throw new Error(errorMessage);
@@ -57,6 +59,7 @@ async function run(event) {
     // responseText.value = 'An error occurred: ' + error;
     console.error('Error:', error);
     const errorString = error.message;
+
     const errorObject = JSON.parse(errorString);
     console.log(errorObject.detail); // Output: This model's maximum context length is 4097 tokens, however you requested 1204850 tokens (1204594 in your prompt; 256 for the completion). Please reduce your prompt; or completion length.
     responseText.value = 'An error occurred: ' + errorObject.detail;
