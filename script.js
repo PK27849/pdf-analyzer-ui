@@ -42,9 +42,7 @@ async function run(event) {
       body: formData
     }, 300000); // Set the timeout duration to 5 minutes (120000 milliseconds)
 
-    // if (!response.ok) {
-    //   throw new Error(responseText);
-    // }
+
     if (!response.ok) {
       const errorMessage = await response.text();
       throw new Error(errorMessage);
