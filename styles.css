@@ -55,13 +55,13 @@ body {
 
 .instructions {
   padding: 20px;
-  background-color: #221f1f;
+  background-color: black;
   color: #fff;
   height: 100%;
 }
 
 .instructions h2 {
-  color: #0c0c0c;
+  color: white;
 }
 
 .usage-steps {
@@ -230,6 +230,18 @@ body {
   padding: 10px 0;
 }
 
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: black;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 0.25rem;
+}
+
 .footer-banner {
   display: flex;
   flex-direction: column;
@@ -241,6 +253,16 @@ body {
 #response-text,
 .list-group-item {
   text-align: left;
+}
+
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: 0.5rem 1rem;
+  color: white;
+  text-decoration: none;
+  background-color: black;
+  border: 1px solid rgba(0,0,0,.125);
 }
 
 .footer-text {
