@@ -5,6 +5,17 @@ function showFileName(input) {
   }
 }
 
+function toggleFileInput() {
+  var fileInput = document.getElementById('file');
+  var openaiCheckbox = document.getElementById('getFromOpenAI');
+
+  if (openaiCheckbox.checked) {
+    fileInput.disabled = true;
+  } else {
+    fileInput.disabled = false;
+  }
+}
+
 async function run(event) {
   event.preventDefault();
 
