@@ -31,7 +31,7 @@
                 <div class="card-body">
                   <h2 class="card-title">How to Use</h2>
                   <ol class="list-group list-group-numbered">
-                    <li class="list-group-item">Upload a file</li>
+                    <li class="list-group-item">Upload PDF</li>
                     <li class="list-group-item">Enter OpenAI API Key</li>
                     <li class="list-group-item">Enter Question</li>
                     <li class="list-group-item">Click Run</li>
@@ -51,8 +51,15 @@
               <input type="file" class="form-control" id="file">
               <!-- <label class="input-group-text" for="file">Upload</label> -->
             </div>
-            <small class="form-text text-muted"><span style="color: red">*</span>Upload .pdf for unstructured data and .json file for structured data</small>
+            <small class="form-text text-muted"><span style="color: red">*</span>Supports pdf, txt, and json files only</small>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="getFromOpenAI" onchange="toggleFileInput()">
+              <label class="form-check-label" for="getFromOpenAI">
+                Get from OpenAI
+              </label>
+            </div>
           </div>
+
           <!-- <div class="input-api">
             <label for="OpenAI" class="form-label">OpenAI API Key</label>
             <input type="text" class="form-control" id="OpenAI" placeholder="Enter API Key">
@@ -73,12 +80,14 @@
             <label for="question" class="form-label">Question</label>
             <textarea class="form-control" id="question" placeholder="Enter your question"></textarea>
           </div>
-           <div class="form-check">
+
+          <div class="form-check">
             <input class="form-check-input" type="checkbox" id="lemmatizationCheckbox">
             <label class="form-check-label" for="lemmatizationCheckbox">
               Enable/Disable Lemmatization
-           </label>
+            </label>
           </div>
+
           <div class="button-section">
             <button class="btn btn-primary" onclick="clearResponse()">Clear</button>
             <button class="btn btn-primary" onclick="run(event)">Run</button>
