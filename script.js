@@ -18,7 +18,7 @@ function toggleFileInput() {
 
 async function run(event) {
   event.preventDefault();
-
+  
   var fileInput = document.getElementById('file');
   var file = fileInput.files[0];
 
@@ -33,14 +33,29 @@ async function run(event) {
   responseText.value = '';
 
   // Validate required fields
-  if (!file || !openAIKey || !question) {
+  if (!openAIKey || !question) {
     showAlert();
     return;
   }
 
   var apiUrl = 'https://prasank02-pdf-search-api.hf.space/search';
   var formData = new FormData();
-  formData.append('file', file);
+
+  // Check if "Get from OpenAI" checkbox is checked
+  var getFromOpenAI = document.getElementById('getFromOpenAI').checked;
+
+    if (!getFromOpenAI) {
+    var fileInput = document.getElementById('file');
+    var file = fileInput.files[0];
+
+    // Validate file selection
+    if (!file) {
+      showAlert();
+      return;
+    }
+
+    formData.append('file', file);
+  }
   formData.append('api_key', openAIKey);
   formData.append('text', question);
 
@@ -53,9 +68,6 @@ async function run(event) {
       body: formData
     }, 300000); // Set the timeout duration to 5 minutes (120000 milliseconds)
 
-    // if (!response.ok) {
-    //   throw new Error(responseText);
-    // }
     if (!response.ok) {
       const errorMessage = await response.text();
       throw new Error(errorMessage);
@@ -64,16 +76,18 @@ async function run(event) {
 
     const data = await response.json();
     responseText.value = data.response;
+    console.log(data.response)
   } catch (error) {
-    // console.error('Error:', error);
-    // responseText.value = 'Timeout occured while fetching the response';
-    // responseText.value = 'An error occurred: ' + error;
     console.error('Error:', error);
-    const errorString = error.message;
-
-    const errorObject = JSON.parse(errorString);
-    console.log(errorObject.detail); // Output: This model's maximum context length is 4097 tokens, however you requested 1204850 tokens (1204594 in your prompt; 256 for the completion). Please reduce your prompt; or completion length.
-    responseText.value = 'An error occurred: ' + errorObject.detail;
+    if (error instanceof Error) {
+      // Handle general errors
+      responseText.value = 'An error occurred: ' + error.message;
+    } else {
+      // Handle server response errors
+      const errorObject = JSON.parse(error);
+      const status = errorObject.detail[0].msg;
+      responseText.value = 'Status: ' + response.status + '\n' + status;
+    }
   } finally {
     spinnerContainer.style.display = 'none'; // Hide the spinner after receiving the response or error
     document.body.classList.remove('blur'); // Remove blur from the background
